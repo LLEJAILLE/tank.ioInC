@@ -1,11 +1,11 @@
 # Tank.ioInC SFML ONLINE
 
-<!-- Description -->
+Description
 
     Le projet **Tank.ioInC** est un projet développé en C par Louis Lejaille, étudiant à Epitech Nancy. Il s'agit d'un jeu dans lequel vous vous battez contre vos amis avec un tank, le tout réalisé en C.
 
 
-<!-- Installation -->
+Installation
 
     1. **Installation :**
     2. **Étape 1 : Clonez le dépôt**
@@ -13,10 +13,10 @@
     4. **Étape 3 : Exécutez `./tank_server` avec les instructions du -help**
     5. **Étape 4 : Exécutez `./tank_client` avec les instructions du -help**
 
-<!-- Auteurs -->
+Auteurs
 
     - Louis Lejaille
     - Année de développement : 2023 (juillet - août)
 
-<!-- License -->
+License
     Ce projet est protégé par le droit d'auteur. Ne pas recopier ce code.
