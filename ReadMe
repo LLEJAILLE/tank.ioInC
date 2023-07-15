@@ -2,30 +2,27 @@
 
 ## Description
 
-Le projet **[Tank.ioInC]** est un projet **[développé en c par Louis Lejaille, Etudiant à Epitech Nancy]**.
-Il s'agit d'un **[jeu dans lequel vous vous battez contre vos amis avec un tank. Tout cela réalisé en C]**.
-
+Le projet **Tank.ioInC** est un projet développé en C par Louis Lejaille, étudiant à Epitech Nancy. Il s'agit d'un jeu dans lequel vous vous battez contre vos amis avec un tank, le tout réalisé en C.
 
 ## Fonctionnalités
 
-- **[Listez les fonctionnalités principales de votre projet]**
-- **[Fonctionnalité 1]**
-- **[Fonctionnalité 2]**
-- **[Fonctionnalité 3]**
+- Fonctionnalité 1
+- Fonctionnalité 2
+- Fonctionnalité 3
 
 ## Installation
 
-1. **[Installation:]**
-2. **[Étape 1] : Clonez le dépôt**
-3. **[Étape 2] : Installez les dépendances (sfml par exemple)**
-4. **[Étape 3] : ./tank_server avec les instructions du -help**
-5. **[Étape 4] : ./tank_client avec les instructions du -help**
+1. **Installation :**
+2. **Étape 1 : Clonez le dépôt**
+3. **Étape 2 : Installez les dépendances (SFML, par exemple)**
+4. **Étape 3 : Exécutez `./tank_server` avec les instructions du -help**
+5. **Étape 4 : Exécutez `./tank_client` avec les instructions du -help**
 
 ## Auteurs
 
-- **[Louis Lejaille]**
-- **[Année de développement: 2023 (juillet - aout)]**
+- Louis Lejaille
+- Année de développement : 2023 (juillet - août)
 
 ## Licence
 
-Ce projet est copyright, ne pas recopier ce code.
+Ce projet est protégé par le droit d'auteur. Ne pas recopier ce code.
