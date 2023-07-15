@@ -14,20 +14,56 @@
 
 //------------Add nodes from the linked list--------------------------//
 
+client_room_tank_t *add_node_client_room_tank(client_room_tank_t *client_room, int fd_cli)
+{
+    client_room_tank_t *new = malloc(sizeof(client_room_tank_t));
+    new->client_fd = fd_cli;
+    new->live = 3;
+    new->posX = 0.0;
+    new->posY = 0.0;
+    new->next = NULL;
+
+    if (client_room == NULL)
+        return (new);
+    client_room_tank_t *tmp = client_room;
+    for (; tmp->next != NULL; tmp = tmp->next)
+        ;
+    tmp->next = new;
+    return (client_room);
+}
+
+//------------Add nodes from the linked list--------------------------//
+
+Rooms_tank_t *add_node_client_room(Rooms_tank_t *room, int id)
+{
+    Rooms_tank_t *new = malloc(sizeof(Rooms_tank_t));
+    new->client_room_tank = NULL;
+    new->id_room = id;
+    new->next = NULL;
+
+    if (room == NULL)
+        return (new);
+    Rooms_tank_t *tmp = room;
+    for (; tmp->next != NULL; tmp = tmp->next)
+        ;
+    tmp->next = new;
+    return (room);
+}
+
+//------------Add nodes from the linked list--------------------------//
+
 client_tank_t *add_node_client_tank(client_tank_t *tank, int fd_cli)
 {
     client_tank_t *new = malloc(sizeof(client_tank_t));
     new->client_fd = fd_cli;
     new->closed = false;
-    new->live = 3;
-    new->posX = 0;
-    new->posY = 0;
     new->next = NULL;
 
     if (tank == NULL)
         return (new);
     client_tank_t *tmp = tank;
-    for (; tmp->next != NULL; tmp = tmp->next);
+    for (; tmp->next != NULL; tmp = tmp->next)
+        ;
     tmp->next = new;
     return (tank);
 }
@@ -38,22 +74,24 @@ client_tank_t *remove_node_client_tank(client_tank_t *list_tank)
 {
     client_tank_t *tmp = list_tank;
     if (list_tank == NULL)
-        return (NULL);
-    if (list_tank->closed == true) {
+        return NULL;
+    if (list_tank->closed == true)
+    {
         list_tank = list_tank->next;
         close(tmp->client_fd);
         free(tmp);
-        return (list_tank);
+        return list_tank;
     }
-    for (client_tank_t *tmp2 = list_tank;
-        tmp->next != NULL; tmp = tmp->next) {
-        if (tmp->next->closed == true) {
+    for (client_tank_t *tmp2 = list_tank; tmp->next != NULL; tmp = tmp->next)
+    {
+        if (tmp->next->closed == true)
+        {
             tmp2 = tmp->next;
             tmp->next = tmp->next->next;
             close(tmp2->client_fd);
             free(tmp2);
-            return (list_tank);
+            return list_tank;
         }
     }
-    return (list_tank);
+    return list_tank;
 }

@@ -75,6 +75,61 @@ void read_client(client_tank_t *list_tank, tank_t *tank)
             printf("terminal cleared!\n");
         }
 
+        //check si le debut de la commande est hit
+
+        if (strncmp(tank->buffer, "hit", 3) == 0) {
+            int checkClientIsInRoom = 0;
+
+            for (Rooms_tank_t *tmp = tank->Rooms_tank; tmp; tmp = tmp->next) {
+                if (tmp->client_room_tank == NULL) {
+                    dprintf(list_tank->client_fd, "[?] === Impossible to hit\n");
+                    checkClientIsInRoom = 2;
+                    break;
+                }
+                for (client_room_tank_t *tmp2 = tmp->client_room_tank; tmp2; tmp2 = tmp2->next) {
+                    if (tmp2->client_fd == list_tank->client_fd) {
+                        checkClientIsInRoom = 1;
+                        // parse_hit(tank->buffer, tank, list_tank->client_fd);
+                    }
+                }
+            }
+            if (checkClientIsInRoom == 0)
+            {
+                dprintf(list_tank->client_fd, "You're not affected to a room");
+            }
+        }
+
+        if (strcmp(tank->buffer, "rooms -l\n") == 0) {
+            dprintf(list_tank->client_fd, "=====list of room=====\n");
+            for (Rooms_tank_t *tmp = tank->Rooms_tank; tmp; tmp = tmp->next) {
+                dprintf(list_tank->client_fd, "\troom: %d\n", tmp->id_room);
+            }
+            dprintf(list_tank->client_fd, "======================\n");
+            dprintf(list_tank->client_fd, "There is %d rooms\n", tank->nbRoom);
+        }
+
+        if (strcmp(tank->buffer, "whoami\n") == 0) {
+            dprintf(list_tank->client_fd, "You are the client number: %d\n", list_tank->client_fd);
+            
+            for (Rooms_tank_t *tmp = tank->Rooms_tank; tmp; tmp = tmp->next) {
+                if (tmp->client_room_tank == NULL) {
+                    dprintf(list_tank->client_fd, "You are not in a room\n");
+                    break;
+                }
+                for (client_room_tank_t *tmp2 = tmp->client_room_tank; tmp2; tmp2 = tmp2->next) {
+                    if (tmp2->client_fd == list_tank->client_fd) {
+                        dprintf(list_tank->client_fd, "You are in room %d\n", tmp->id_room);
+                    } else {
+                        dprintf(list_tank->client_fd, "You are not in a room\n");
+                    }
+                }
+            }
+        }
+
+        if (strncmp(tank->buffer, "goto", 4) == 0) {
+            // add_node_client_room_tank(tank->Rooms_tank, list_tank->client_fd);
+        }
+
 
         if (strcmp(tank->buffer, "exit\n") == 0) {
             printf("Server is shutting down.\n");

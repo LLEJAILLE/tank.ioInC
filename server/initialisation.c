@@ -27,6 +27,17 @@ tank_t *init_struct_tank(char *port)
     tank->addrlen = sizeof(tank->address);
     tank->numbertoremove = 0;
     tank->client_tank = NULL;
+    tank->client_room_tank = NULL;
+    tank->Rooms_tank = NULL;
 
+    tank->MAP_HEIGHT = 10.0;
+    tank->MAP_WIDTH = 10.0;
+    tank->nbRoom = 3;
+
+    for (int i = 0; i < tank->nbRoom; i++){
+        printf("on rempli la liste des rooms\n");
+        tank->Rooms_tank = add_node_client_room(tank->Rooms_tank, i);
+    }
+    
     return tank;
 }

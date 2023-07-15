@@ -11,7 +11,6 @@
 
 #include "server.h"
 
-
 //------------Functions to catch ctrl+C-------------------------------//
 
 void handle_signal(int signal)
