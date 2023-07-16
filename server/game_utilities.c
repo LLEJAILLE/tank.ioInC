@@ -7,13 +7,25 @@
 
 #include "server.h"
 
+client_room_tank_t *reset_list_room(client_room_tank_t *list_client_room)
+{
+    client_room_tank_t *tmp = list_client_room;
+    for (; tmp; tmp = tmp->next) {
+        tmp->posX = 0.0;
+        tmp->posY = 0.0;
+        tmp->close = false;
+        tmp->live = 3;
+    }
+
+    return (list_client_room);
+}
+
 void parse_hit(char *buffer, tank_t *tank, int client_fd_sender, client_room_tank_t *list_client_in_room, Rooms_tank_t *list_room) {
     char **word = strToWordArray(buffer);
     int hittable_player = atoi(word[1]);
 
     for (Rooms_tank_t *tmp = tank->Rooms_tank; tmp; tmp = tmp->next) {
         for (client_room_tank_t *tmp2 = tmp->client_room_tank; tmp2; tmp2 = tmp2->next) {
-            client_room_tank_t *next_client = tmp2->next;
             if (tmp2->client_fd == hittable_player) {
                 dprintf(tmp2->client_fd, "You have been hit by %d\n", client_fd_sender);
                 dprintf(client_fd_sender, "You hit %d\n", hittable_player);
@@ -21,13 +33,13 @@ void parse_hit(char *buffer, tank_t *tank, int client_fd_sender, client_room_tan
             }
 
             if (tmp2->live == 0) {
-                dprintf(tmp2->client_fd, "%d killed you\n", client_fd_sender);
-                dprintf(client_fd_sender, "You killed %d\n", hittable_player);
+                dprintf(tmp2->client_fd, "You died. Player: %d has killed you.\n", client_fd_sender);
+                dprintf(client_fd_sender, "Victory !, You killed player: %d\n", hittable_player);
                 tmp2->close = true;
-                tmp->client_room_tank = remove_room_client(tmp->client_room_tank);
-                tmp->nb_client_in_room--;
+                tmp->gameStarted = false;
+                tmp->nb_client_in_room = 2;
+                tmp->client_room_tank = reset_list_room(tmp->client_room_tank);
             }
-            tmp2 = next_client;
         }
     }
 
@@ -98,3 +110,4 @@ void startGame(tank_t *tank, int client_fd)
         tmp = tmp->next;
     }
 }
+

@@ -116,7 +116,11 @@ void read_client(client_tank_t *list_tank, tank_t *tank)
                     dprintf(list_tank->client_fd, "\t[Game not started]\n");
                 }
                 for (client_room_tank_t *tmp2 = tmp->client_room_tank; tmp2; tmp2 = tmp2->next) {
-                    dprintf(list_tank->client_fd, "\t\tclient: %d\n", tmp2->client_fd);
+                    if (tmp->gameStarted == true) {
+                        dprintf(list_tank->client_fd, "\t\tclient: %d, lifes remaining: %d\n", tmp2->client_fd, tmp2->live);
+                    } else {
+                        dprintf(list_tank->client_fd, "\t\tclient: %d\n", tmp2->client_fd);
+                    }
                 }
             }
             dprintf(list_tank->client_fd, "======================\n");
@@ -129,7 +133,7 @@ void read_client(client_tank_t *list_tank, tank_t *tank)
             for (Rooms_tank_t *tmp = tank->Rooms_tank; tmp; tmp = tmp->next) {
                 for (client_room_tank_t *tmp2 = tmp->client_room_tank; tmp2; tmp2 = tmp2->next) {
                     if (tmp2->client_fd == list_tank->client_fd) {
-                        dprintf(list_tank->client_fd, "You are in room %d\n", tmp->id_room);
+                        dprintf(list_tank->client_fd, "You are in room %d, you have %d lives remaining, close: %d\n", tmp->id_room, tmp2->live, tmp2->close);
                     }
                 }
             }
@@ -176,7 +180,6 @@ void read_client(client_tank_t *list_tank, tank_t *tank)
         // }
     }
 }
-
 
 //------------Remove a client from the linkedlist or read client------//
 void loop_server(tank_t *tank)
