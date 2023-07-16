@@ -18,17 +18,14 @@ client_room_tank_t *remove_room_client(client_room_tank_t *list_tank)
     client_room_tank_t *tmp = list_tank;
     if (list_tank == NULL)
         return NULL;
-    if (list_tank->close == true)
-    {
+    if (list_tank->close == true) {
         list_tank = list_tank->next;
         printf("on remove\n");
         free(tmp);
         return list_tank;
     }
-    for (client_room_tank_t *tmp2 = list_tank; tmp->next != NULL; tmp = tmp->next)
-    {
-        if (tmp->next->close == true)
-        {
+    for (client_room_tank_t *tmp2 = list_tank; tmp->next != NULL; tmp = tmp->next) {
+        if (tmp->next->close == true) {
             tmp2 = tmp->next;
             tmp->next = tmp->next->next;
             printf("on remove\n");

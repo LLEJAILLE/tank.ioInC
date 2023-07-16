@@ -111,7 +111,7 @@ client_tank_t *add_node_client_tank(client_tank_t *tank, int fd_cli);
 client_tank_t *remove_node_client_tank(client_tank_t *list_tank);
 tank_t *init_struct_tank(char *port);
 int create_socket(int port);
-void parse_hit(char *buffer, tank_t *tank, int client_fd_sender);
+void parse_hit(char *buffer, tank_t *tank, int client_fd_sender, client_room_tank_t *list_client_in_room, Rooms_tank_t *list_room);
 char **strToWordArray(char *str);
 Rooms_tank_t *add_node_client_room(Rooms_tank_t *room, int id);
 client_room_tank_t *add_node_client_room_tank(client_room_tank_t *client_room, int fd_cli);

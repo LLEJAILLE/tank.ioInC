@@ -7,26 +7,30 @@
 
 #include "server.h"
 
-void parse_hit(char *buffer, tank_t *tank, int client_fd_sender) {
+void parse_hit(char *buffer, tank_t *tank, int client_fd_sender, client_room_tank_t *list_client_in_room, Rooms_tank_t *list_room) {
     char **word = strToWordArray(buffer);
-
     int hittable_player = atoi(word[1]);
 
-    client_room_tank_t *tmp = tank->client_room_tank;
+    for (Rooms_tank_t *tmp = tank->Rooms_tank; tmp; tmp = tmp->next) {
+        for (client_room_tank_t *tmp2 = tmp->client_room_tank; tmp2; tmp2 = tmp2->next) {
+            client_room_tank_t *next_client = tmp2->next;
+            if (tmp2->client_fd == hittable_player) {
+                dprintf(tmp2->client_fd, "You have been hit by %d\n", client_fd_sender);
+                dprintf(client_fd_sender, "You hit %d\n", hittable_player);
+                tmp2->live -= 1;
+            }
 
-    while (tmp != NULL)
-    {
-        if (tmp->client_fd == hittable_player)
-        {
-            tmp->live = tmp->live - 1;
-
-            printf("Player %d has been hit.\n", tmp->client_fd);
-            printf("Player %d has %d lives left.\n", tmp->client_fd, tmp->live);
-            return;
+            if (tmp2->live == 0) {
+                dprintf(tmp2->client_fd, "%d killed you\n", client_fd_sender);
+                dprintf(client_fd_sender, "You killed %d\n", hittable_player);
+                tmp2->close = true;
+                tmp->client_room_tank = remove_room_client(tmp->client_room_tank);
+                tmp->nb_client_in_room--;
+            }
+            tmp2 = next_client;
         }
-        tmp = tmp->next;
     }
-    printf("The player you tried to hit doesn't exist.\n");
+
 }
 
 void goToRoom(tank_t *tank, int client_fd, char *buffer) {

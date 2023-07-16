@@ -96,7 +96,7 @@ void read_client(client_tank_t *list_tank, tank_t *tank)
                 for (client_room_tank_t *tmp2 = tmp->client_room_tank; tmp2; tmp2 = tmp2->next) {
                     if (tmp2->client_fd == list_tank->client_fd && tmp->gameStarted == true) {
                         checkClientIsInRoom = 1;
-                        parse_hit(tank->buffer, tank, list_tank->client_fd);
+                        parse_hit(tank->buffer, tank, list_tank->client_fd, tmp2, tmp);
                     }
                 }
             }
