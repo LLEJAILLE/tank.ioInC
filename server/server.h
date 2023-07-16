@@ -51,7 +51,6 @@ typedef struct client_room_tank_s {
     float posX;
     float posY;
     float direction;
-
     bool close;
 
     struct client_room_tank_s *next;
@@ -62,6 +61,8 @@ typedef struct client_room_tank_s {
 typedef struct Rooms_tank_s {
     int id_room;
     struct client_room_tank_s *client_room_tank;
+    int nb_client_in_room;
+    bool gameStarted;
 
     struct Rooms_tank_s *next;
 } Rooms_tank_t;
@@ -116,5 +117,6 @@ Rooms_tank_t *add_node_client_room(Rooms_tank_t *room, int id);
 client_room_tank_t *add_node_client_room_tank(client_room_tank_t *client_room, int fd_cli);
 void goToRoom(tank_t *tank, int client_fd, char *buffer);
 client_room_tank_t *remove_room_client(client_room_tank_t *list_tank);
+void startGame(tank_t *tank, int client_fd);
 
 #endif /* !SERVER_H_ */

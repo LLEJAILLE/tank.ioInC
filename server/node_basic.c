@@ -67,6 +67,8 @@ Rooms_tank_t *add_node_client_room(Rooms_tank_t *room, int id)
     Rooms_tank_t *new = malloc(sizeof(Rooms_tank_t));
     new->client_room_tank = NULL;
     new->id_room = id;
+    new->nb_client_in_room = 0;
+    new->gameStarted = false;
     new->next = NULL;
 
     if (room == NULL)
