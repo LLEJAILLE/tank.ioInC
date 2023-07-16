@@ -117,6 +117,7 @@ void read_client(client_tank_t *list_tank, tank_t *tank)
 
 
         ////////////////////////////COMMANDS////////////////////////////
+        // (here, there is the possibility to create a function pointer array to call the function directly, but i don't have the time to do it, so i just use if and strcmp :/)
 
         // if the client send clear, we clear the terminal of the server (it's for me to debug, you can remove it)
         if (strcmp(tank->buffer, "clear\n") == 0) {
