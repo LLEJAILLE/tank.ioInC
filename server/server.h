@@ -32,16 +32,6 @@
     #include <fcntl.h>
 
 
-
-typedef struct Projectile_s {
-    float x;
-    float y;
-    float direction; // Direction en radians (0 - 2π)
-
-    int id_client;
-
-} Projectile_t;
-
 //------------Linked list for clients in room ------------------------//
 
 typedef struct client_room_tank_s {
@@ -50,7 +40,7 @@ typedef struct client_room_tank_s {
 
     float posX;
     float posY;
-    float direction;
+    int direction;
     bool close;
 
     struct client_room_tank_s *next;
@@ -118,5 +108,6 @@ client_room_tank_t *add_node_client_room_tank(client_room_tank_t *client_room, i
 void goToRoom(tank_t *tank, int client_fd, char *buffer);
 client_room_tank_t *remove_room_client(client_room_tank_t *list_tank);
 void startGame(tank_t *tank, int client_fd);
+void set(tank_t *tank, int client_fd_sender, client_room_tank_t *list_client_in_room, Rooms_tank_t *list_room, char *buffer);
 
 #endif /* !SERVER_H_ */

@@ -87,8 +87,6 @@ void read_client(client_tank_t *list_tank, tank_t *tank)
             printf("terminal cleared!\n");
         }
 
-        //check si le debut de la commande est hit
-
         if (strncmp(tank->buffer, "hit", 3) == 0) {
             int checkClientIsInRoom = 0;
 
@@ -100,9 +98,18 @@ void read_client(client_tank_t *list_tank, tank_t *tank)
                     }
                 }
             }
-            if (checkClientIsInRoom == 0)
-            {
+            if (checkClientIsInRoom == 0) {
                 dprintf(list_tank->client_fd, "You're not affected to a room");
+            }
+        }
+
+        if (strncmp(tank->buffer, "setPos", 6) == 0) {
+            for (Rooms_tank_t *tmp = tank->Rooms_tank; tmp; tmp = tmp->next) {
+                for (client_room_tank_t *tmp2 = tmp->client_room_tank; tmp2; tmp2 = tmp2->next) {
+                    if (tmp2->client_fd == list_tank->client_fd && tmp->gameStarted == true) {
+                        set(tank, list_tank->client_fd, tmp2, tmp, tank->buffer);
+                    }
+                }
             }
         }
 
@@ -117,9 +124,9 @@ void read_client(client_tank_t *list_tank, tank_t *tank)
                 }
                 for (client_room_tank_t *tmp2 = tmp->client_room_tank; tmp2; tmp2 = tmp2->next) {
                     if (tmp->gameStarted == true) {
-                        dprintf(list_tank->client_fd, "\t\tclient: %d, lifes remaining: %d\n", tmp2->client_fd, tmp2->live);
+                        dprintf(list_tank->client_fd, "\t\tplayer: %d, lifes remaining: %d\n", tmp2->client_fd, tmp2->live);
                     } else {
-                        dprintf(list_tank->client_fd, "\t\tclient: %d\n", tmp2->client_fd);
+                        dprintf(list_tank->client_fd, "\t\tplayer: %d\n", tmp2->client_fd);
                     }
                 }
             }
@@ -133,7 +140,7 @@ void read_client(client_tank_t *list_tank, tank_t *tank)
             for (Rooms_tank_t *tmp = tank->Rooms_tank; tmp; tmp = tmp->next) {
                 for (client_room_tank_t *tmp2 = tmp->client_room_tank; tmp2; tmp2 = tmp2->next) {
                     if (tmp2->client_fd == list_tank->client_fd) {
-                        dprintf(list_tank->client_fd, "You are in room %d, you have %d lives remaining, close: %d\n", tmp->id_room, tmp2->live, tmp2->close);
+                        dprintf(list_tank->client_fd, "You are in room %d, you have %d lives remaining, posX: %f, posY: %f, angle: %d\n", tmp->id_room, tmp2->live, tmp2->posX, tmp2->posY, tmp2->direction);
                     }
                 }
             }
@@ -168,6 +175,7 @@ void read_client(client_tank_t *list_tank, tank_t *tank)
             dprintf(list_tank->client_fd, "\tgto: go to a room\n");
             dprintf(list_tank->client_fd, "\tgout: go out of a room\n");
             dprintf(list_tank->client_fd, "\thit: hit a client\n");
+            dprintf(list_tank->client_fd, "\tsetPos: set your position\n");
             dprintf(list_tank->client_fd, "\texit: exit the server\n");
             dprintf(list_tank->client_fd, "======================\n");
         }

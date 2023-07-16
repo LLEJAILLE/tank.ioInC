@@ -45,6 +45,7 @@ client_room_tank_t *add_node_client_room_tank(client_room_tank_t *client_room, i
     new->live = 3;
     new->posX = 0.0;
     new->posY = 0.0;
+    new->direction = 0;
     new->close = false;
     new->next = NULL;
 

@@ -13,11 +13,38 @@ client_room_tank_t *reset_list_room(client_room_tank_t *list_client_room)
     for (; tmp; tmp = tmp->next) {
         tmp->posX = 0.0;
         tmp->posY = 0.0;
+        tmp->direction = 0;
         tmp->close = false;
         tmp->live = 3;
     }
 
     return (list_client_room);
+}
+
+void set(tank_t *tank, int client_fd_sender, client_room_tank_t *list_client_in_room, Rooms_tank_t *list_room, char *buffer)
+{
+    char **word = NULL;
+    word = strToWordArray(buffer);
+
+    for (Rooms_tank_t *tmp = tank->Rooms_tank; tmp; tmp = tmp->next) {
+        for (client_room_tank_t *tmp2 = tmp->client_room_tank; tmp2; tmp2 = tmp2->next) {
+            if (tmp2->client_fd == client_fd_sender && tmp->gameStarted == true) {
+                tmp2->posX = atof(word[1]);
+                tmp2->posY = atof(word[2]);
+                tmp2->direction = atoi(word[3]);
+
+                dprintf(client_fd_sender, "Your position is now: (x: %f, y: %f, angle: %d)\n", tmp2->posX, tmp2->posY, tmp2->direction);
+            }
+        }
+    }
+
+
+    for (Rooms_tank_t *tmp = tank->Rooms_tank; tmp; tmp = tmp->next) {
+        for (client_room_tank_t *tmp2 = tmp->client_room_tank; tmp2; tmp2 = tmp2->next) {
+            printf("client: %d\n", tmp2->client_fd);
+        }
+    }
+
 }
 
 void parse_hit(char *buffer, tank_t *tank, int client_fd_sender, client_room_tank_t *list_client_in_room, Rooms_tank_t *list_room) {

@@ -32,7 +32,7 @@ tank_t *init_struct_tank(char *port)
 
     tank->MAP_HEIGHT = 10.0;
     tank->MAP_WIDTH = 10.0;
-    tank->nbRoom = 3;
+    tank->nbRoom = 10;
 
     for (int i = 0; i < tank->nbRoom; i++){
         tank->Rooms_tank = add_node_client_room(tank->Rooms_tank, i);
