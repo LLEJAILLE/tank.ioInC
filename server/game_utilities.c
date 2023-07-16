@@ -29,3 +29,26 @@ void parse_hit(char *buffer, tank_t *tank, int client_fd_sender) {
     printf("The player you tried to hit doesn't exist.\n");
 }
 
+void goToRoom(tank_t *tank, int client_fd, char *buffer) {
+
+    Rooms_tank_t *tmp = tank->Rooms_tank;
+    char **word = strToWordArray(buffer);
+    int room_id = atoi(word[1]);
+
+    while (tmp != NULL)
+    {
+        if (tmp->id_room == room_id)
+        {
+            tmp->client_room_tank = add_node_client_room_tank(tmp->client_room_tank, client_fd);
+            return;
+        }
+        tmp = tmp->next;
+    }
+}
+
+void exitRoom(tank_t *tank, int client_fd)
+{
+    Rooms_tank_t *tmp = tank->Rooms_tank;
+
+    //free totalement la node en question
+}

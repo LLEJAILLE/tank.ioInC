@@ -35,7 +35,6 @@ tank_t *init_struct_tank(char *port)
     tank->nbRoom = 3;
 
     for (int i = 0; i < tank->nbRoom; i++){
-        printf("on rempli la liste des rooms\n");
         tank->Rooms_tank = add_node_client_room(tank->Rooms_tank, i);
     }
     

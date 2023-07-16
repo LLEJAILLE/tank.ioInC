@@ -65,6 +65,18 @@ void read_client(client_tank_t *list_tank, tank_t *tank)
     if (bytes_received == 0) {
         printf("the user %d DISCONNECT\n", list_tank->client_fd);
         list_tank->closed = true;
+
+        for (Rooms_tank_t *tmp = tank->Rooms_tank; tmp; tmp = tmp->next) {
+            for (client_room_tank_t *tmp2 = tmp->client_room_tank; tmp2; tmp2 = tmp2->next) {
+                if (tmp2->client_fd == list_tank->client_fd) {
+                    tmp2->close = true;
+                    tmp->client_room_tank = remove_room_client(tmp->client_room_tank);
+                    dprintf(list_tank->client_fd, "You are out of the room %d\n", tmp->id_room);
+                    break;
+                }
+            }
+        }
+        
         tank->numbertoremove++;
     } else {
         tank->buffer[bytes_received] = '\0';
@@ -99,10 +111,13 @@ void read_client(client_tank_t *list_tank, tank_t *tank)
             }
         }
 
-        if (strcmp(tank->buffer, "rooms -l\n") == 0) {
+        if (strcmp(tank->buffer, "rooms\n") == 0) {
             dprintf(list_tank->client_fd, "=====list of room=====\n");
             for (Rooms_tank_t *tmp = tank->Rooms_tank; tmp; tmp = tmp->next) {
                 dprintf(list_tank->client_fd, "\troom: %d\n", tmp->id_room);
+                for (client_room_tank_t *tmp2 = tmp->client_room_tank; tmp2; tmp2 = tmp2->next) {
+                    dprintf(list_tank->client_fd, "\t\tclient: %d\n", tmp2->client_fd);
+                }
             }
             dprintf(list_tank->client_fd, "======================\n");
             dprintf(list_tank->client_fd, "There is %d rooms\n", tank->nbRoom);
@@ -119,6 +134,7 @@ void read_client(client_tank_t *list_tank, tank_t *tank)
                 for (client_room_tank_t *tmp2 = tmp->client_room_tank; tmp2; tmp2 = tmp2->next) {
                     if (tmp2->client_fd == list_tank->client_fd) {
                         dprintf(list_tank->client_fd, "You are in room %d\n", tmp->id_room);
+                        break;
                     } else {
                         dprintf(list_tank->client_fd, "You are not in a room\n");
                     }
@@ -126,8 +142,21 @@ void read_client(client_tank_t *list_tank, tank_t *tank)
             }
         }
 
-        if (strncmp(tank->buffer, "goto", 4) == 0) {
-            // add_node_client_room_tank(tank->Rooms_tank, list_tank->client_fd);
+        if (strncmp(tank->buffer, "gto", 3) == 0) {
+            goToRoom(tank, list_tank->client_fd, tank->buffer);
+        }
+
+        if (strncmp(tank->buffer, "gout", 4) == 0) {
+            for (Rooms_tank_t *tmp = tank->Rooms_tank; tmp; tmp = tmp->next) {
+                for (client_room_tank_t *tmp2 = tmp->client_room_tank; tmp2; tmp2 = tmp2->next) {
+                    if (tmp2->client_fd == list_tank->client_fd) {
+                        tmp2->close = true;
+                        tmp->client_room_tank = remove_room_client(tmp->client_room_tank);
+                        dprintf(list_tank->client_fd, "You are out of the room %d\n", tmp->id_room);
+                        break;
+                    }
+                }
+            }
         }
 
 
@@ -153,6 +182,7 @@ void loop_server(tank_t *tank)
     }
     while (tank->numbertoremove > 0) {
         tank->client_tank = remove_node_client_tank(tank->client_tank);
+        tank->client_room_tank = remove_room_client(tank->client_room_tank);
         tank->numbertoremove--;
     }
 }

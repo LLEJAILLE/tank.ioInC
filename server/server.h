@@ -52,6 +52,8 @@ typedef struct client_room_tank_s {
     float posY;
     float direction;
 
+    bool close;
+
     struct client_room_tank_s *next;
 } client_room_tank_t;
 
@@ -112,5 +114,7 @@ void parse_hit(char *buffer, tank_t *tank, int client_fd_sender);
 char **strToWordArray(char *str);
 Rooms_tank_t *add_node_client_room(Rooms_tank_t *room, int id);
 client_room_tank_t *add_node_client_room_tank(client_room_tank_t *client_room, int fd_cli);
+void goToRoom(tank_t *tank, int client_fd, char *buffer);
+client_room_tank_t *remove_room_client(client_room_tank_t *list_tank);
 
 #endif /* !SERVER_H_ */

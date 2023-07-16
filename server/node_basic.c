@@ -12,6 +12,33 @@
 // of client_tank_t. The linked list is used to store the clients connected to
 // the server.
 
+
+client_room_tank_t *remove_room_client(client_room_tank_t *list_tank)
+{
+    client_room_tank_t *tmp = list_tank;
+    if (list_tank == NULL)
+        return NULL;
+    if (list_tank->close == true)
+    {
+        list_tank = list_tank->next;
+        printf("on remove\n");
+        free(tmp);
+        return list_tank;
+    }
+    for (client_room_tank_t *tmp2 = list_tank; tmp->next != NULL; tmp = tmp->next)
+    {
+        if (tmp->next->close == true)
+        {
+            tmp2 = tmp->next;
+            tmp->next = tmp->next->next;
+            printf("on remove\n");
+            free(tmp2);
+            return list_tank;
+        }
+    }
+    return list_tank;
+}
+
 //------------Add nodes from the linked list--------------------------//
 
 client_room_tank_t *add_node_client_room_tank(client_room_tank_t *client_room, int fd_cli)
@@ -21,6 +48,7 @@ client_room_tank_t *add_node_client_room_tank(client_room_tank_t *client_room, i
     new->live = 3;
     new->posX = 0.0;
     new->posY = 0.0;
+    new->close = false;
     new->next = NULL;
 
     if (client_room == NULL)
