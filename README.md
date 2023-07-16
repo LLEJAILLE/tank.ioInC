@@ -19,10 +19,10 @@ tank.ioInC
     qu'il contient.
   
   - Ordre de la documentation:
-    1. Lire attentivement le fichier server.h (qui contient les structures et les fonctions du serveur)
-    2. Commencer par le fichier main.c (qui contient le main du serveur)
-    3. Ensuite, lire le fichier initialisation.c (qui contient les fonctions d'initialisation du serveur, pour les structures et les variables)
-    4. Ensuite pour aller plus loin, lire les fichiers usefull_server.c et game_utilities.c (qui contiennent les fonctions liées au fonctionnement du serveur et du jeu)
+    - Lire attentivement le fichier server.h (qui contient les structures et les fonctions du serveur)
+    - Commencer par le fichier main.c (qui contient le main du serveur)
+    - Ensuite, lire le fichier initialisation.c (qui contient les fonctions d'initialisation du serveur, pour les structures et les variables)
+    - Ensuite pour aller plus loin, lire les fichiers usefull_server.c et game_utilities.c (qui contiennent les fonctions liées au fonctionnement du serveur et du jeu)
 
 
 ###### Propiété de Louis Lejaille
