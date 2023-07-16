@@ -11,14 +11,20 @@
 // This file contains the functions to initialise the server and the main struct
 // tank_t.
 
+
+//------------Initialise the server----------------------------------------------//
 tank_t *init_struct_tank(char *port)
 {
+    // allocate memory for tank_t
     tank_t *tank = malloc(sizeof(tank_t));
+
+    // check if malloc failed
     if (tank == NULL) {
         perror("malloc");
         exit(84);
     }
 
+    // initialise the struct
     tank->server_fd = -1;
     FD_ZERO(&tank->readfds);
     memset(&tank->address, 0, sizeof(struct sockaddr_in));
@@ -34,6 +40,8 @@ tank_t *init_struct_tank(char *port)
     tank->MAP_WIDTH = 10.0;
     tank->nbRoom = 10;
 
+
+    // set all rooms 
     for (int i = 0; i < tank->nbRoom; i++){
         tank->Rooms_tank = add_node_client_room(tank->Rooms_tank, i);
     }

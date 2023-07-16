@@ -33,7 +33,9 @@
 
 
 //------------Linked list for clients in room ------------------------//
-
+//this linked list is used to store the clients in a room, it is used to
+//send the positions of the tanks to the clients in the room and usually
+//to manage players in the room
 typedef struct client_room_tank_s {
     int client_fd;
     int live;
@@ -48,6 +50,7 @@ typedef struct client_room_tank_s {
 
 
 //------------Linked list for room------------------------------------//
+//this linked list is used to store the rooms.
 typedef struct Rooms_tank_s {
     int id_room;
     struct client_room_tank_s *client_room_tank;
@@ -59,6 +62,9 @@ typedef struct Rooms_tank_s {
 
 
 //------------Linked list for client----------------------------------//
+//this linked list stores the clients connected to the server
+//there is no link between the gameplay, rooms and player, there is only
+//clients connected to the server
 typedef struct client_tank_s {
     int client_fd;
 
@@ -69,6 +75,8 @@ typedef struct client_tank_s {
 
 
 //------------Main struct of the project------------------------------//
+//this struct is used to store all the variables of the server
+//there are used to manage the server, the clients, the rooms and the gameplay
 typedef struct tank_s {
     int server_fd;
     fd_set readfds;
@@ -89,7 +97,6 @@ typedef struct tank_s {
     int nbRoom;
 
 } tank_t;
-
 
 
 //------------Prototypes of server------------------------------------//
