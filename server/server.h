@@ -30,6 +30,23 @@
     #include <stdbool.h>
     #include <dlfcn.h>
     #include <fcntl.h>
+    #include <math.h>
+
+
+typedef struct {
+    float x;
+    float y;
+} Point;
+
+typedef struct {
+    Point start;
+    Point end;
+} Ray;
+
+typedef struct {
+    Point topLeft;
+    Point bottomRight;
+} Rectangle;
 
 
 //------------Linked list for clients in room ------------------------//
@@ -116,5 +133,6 @@ void goToRoom(tank_t *tank, int client_fd, char *buffer);
 client_room_tank_t *remove_room_client(client_room_tank_t *list_tank);
 void startGame(tank_t *tank, int client_fd);
 void set(tank_t *tank, int client_fd_sender, client_room_tank_t *list_client_in_room, Rooms_tank_t *list_room, char *buffer);
+void shootRay(tank_t *tank, int client_sender);
 
 #endif /* !SERVER_H_ */

@@ -26,7 +26,7 @@ ${OBJDIR}/%.o: %.c
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	gcc -o $(NAME) $(OBJ) $(CFLAGS) -luuid -g
+	gcc -o $(NAME) $(OBJ) $(CFLAGS) -luuid -g -lm
 	mv $(NAME) ../
 
 clean:

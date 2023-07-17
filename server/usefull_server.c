@@ -144,6 +144,23 @@ void read_client(client_tank_t *list_tank, tank_t *tank)
             }
         }
 
+        if (strncmp(tank->buffer, "shoot", 5) == 0) {
+            int checkClientIsInRoom = 0;
+
+            for (Rooms_tank_t *tmp = tank->Rooms_tank; tmp; tmp = tmp->next) {
+                for (client_room_tank_t *tmp2 = tmp->client_room_tank; tmp2; tmp2 = tmp2->next) {
+                    if (tmp2->client_fd == list_tank->client_fd && tmp->gameStarted == true) {
+                        checkClientIsInRoom = 1;
+                        shootRay(tank, list_tank->client_fd);
+                    }
+                }
+            }
+
+            // if the client is not in a room, we send him a message
+            if (checkClientIsInRoom == 0) {
+                dprintf(list_tank->client_fd, "You're not affected to a room");
+            }
+        }
 
         // if the client send setPos <x> <y> <direction (0 - 360)>, we call the function to parse the command and to set the position of the client
         if (strncmp(tank->buffer, "setPos", 6) == 0) {
@@ -164,7 +181,7 @@ void read_client(client_tank_t *list_tank, tank_t *tank)
                 if (tmp->gameStarted == true) {
                     dprintf(list_tank->client_fd, "\t[Game started]\n");
                 } else {
-                    dprintf(list_tank->client_fd, "\t[Game not started]\n");
+                    dprintf(list_tank->client_fd, "\t[Game not started] [%d/2]\n", tmp->nb_client_in_room);
                 }
                 for (client_room_tank_t *tmp2 = tmp->client_room_tank; tmp2; tmp2 = tmp2->next) {
                     if (tmp->gameStarted == true) {
@@ -251,12 +268,20 @@ void loop_server(tank_t *tank)
         }
         tank_list = tank_list->next;
     }
-
     // remove client from linked list if they are disconnected
     while (tank->numbertoremove > 0) {
+
+        for (Rooms_tank_t *tmp = tank->Rooms_tank; tmp; tmp = tmp->next) {
+
+            if (tmp->nb_client_in_room - 1 >= 0) {
+                tmp->nb_client_in_room--;
+            }
+        }
+
         tank->client_tank = remove_node_client_tank(tank->client_tank);
-        tank->client_room_tank = remove_room_client(tank->client_room_tank);
         tank->numbertoremove--;
+
+        tank_list = tank->client_tank;
     }
 }
 

@@ -26,7 +26,7 @@ NAME = tank_client
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	gcc -o $(NAME) $(OBJ) -luuid -g
+	gcc -o $(NAME) $(OBJ) -lcsfml-graphics -lcsfml-window -lcsfml-system -lcsfml-network -g
 	mv $(NAME) ../
 
 clean:
