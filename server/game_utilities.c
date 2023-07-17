@@ -90,11 +90,10 @@ void parse_hit(char *buffer, tank_t *tank, int client_fd_sender, client_room_tan
     }
 }
 
-bool isPointInRectangle(Point point, Rectangle rectangle)
-{
-    return (point.x >= rectangle.topLeft.x && point.x <= rectangle.bottomRight.x &&
-            point.y >= rectangle.topLeft.y && point.y <= rectangle.bottomRight.y);
-}
+//------------Function to check if the ray touch a player-------------//
+//In this function, we use mathematics to check if the ray
+//sent by the player will touch the enemy
+//This seems tricky but it's not.
 
 bool intersectRayRectangle(Ray ray, Rectangle rectangle)
 {
@@ -128,7 +127,6 @@ bool intersectRayRectangle(Ray ray, Rectangle rectangle)
         tmax = tymax;
     }
 
-    // Modification : Vérifier si le rayon sort du rectangle
     if (tmax < 0 || tmin > 1) {
         return false;
     }
@@ -137,24 +135,23 @@ bool intersectRayRectangle(Ray ray, Rectangle rectangle)
 }
 
 //------------Function to send a ray when someone shoot---------------//
+//the shootRay function !!!
+//here, we used infos from the client_room linked list, posX, posY and direction
+//to send a ray of 10.0 unity. The size of the map is 10 by 10...
+//we create a rectangle of 1.0 by 1.0 around the enemy.
+//and we check if the ray intersect the rectangle
 
 void shootRay(tank_t *tank, int client_sender)
 {
-    // Convertir l'angle en radians
     float angle = 0.0;
 
-    // Calculer les coordonnées du point d'extrémité du rayon
     float endX = 0.0;
     float endY = 0.0;
 
-    // Créer le rayon
     Ray ray;
-
-    // Créer le rectangle représentant la taille d'un joueur
     Rectangle enemy;
 
     int client_rectangle_id = 0;
-
     int enemyClientID = -1;
 
     for (Rooms_tank_t *tmp = tank->Rooms_tank; tmp; tmp = tmp->next) {
@@ -166,9 +163,6 @@ void shootRay(tank_t *tank, int client_sender)
                 enemy.bottomRight.y = tmp2->posY + 0.5;
 
                 client_rectangle_id = tmp2->client_fd;
-
-                printf("le rectangle de l'ennemi se trouve en: topLeftX: %f, topLeftY: %f, botRightX: %f, botRightY: %f\n",
-                       enemy.topLeft.x, enemy.topLeft.y, enemy.bottomRight.x, enemy.bottomRight.y);
             }
         }
     }
@@ -188,9 +182,7 @@ void shootRay(tank_t *tank, int client_sender)
                 ray.end.x = endX;
                 ray.end.y = endY;
 
-                printf("le rayon du joueur tireur: va vers l'angle: %f, depuis le point: (%f, %f), vers le point: (%f, %f)\n", angle, ray.start.x, ray.start.y, ray.end.x, ray.end.y);
-
-                // Vérifier si le rayon touche l'ennemi
+                //check if the enemy is hit
                 if (intersectRayRectangle(ray, enemy)) {
                     enemyClientID = tmp2->client_fd;
                     break;
@@ -200,8 +192,6 @@ void shootRay(tank_t *tank, int client_sender)
     }
 
     if (enemyClientID != -1) {
-        printf("Le joueur: %d a été touché\n", client_rectangle_id);
-
         for (Rooms_tank_t *tmp = tank->Rooms_tank; tmp; tmp = tmp->next) {
             for (client_room_tank_t *tmp2 = tmp->client_room_tank; tmp2; tmp2 = tmp2->next) {
                 if (tmp2->client_fd == client_rectangle_id) {
